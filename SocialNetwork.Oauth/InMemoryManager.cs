@@ -41,8 +41,10 @@ namespace SocialNetwork.Oauth
                 new Scope
                 {
                     Name = "read",
-                    DisplayName = "Read User Data"
-                }
+                    DisplayName = "Read User Data",
+
+                },
+               
 
             };
         }
@@ -68,7 +70,7 @@ namespace SocialNetwork.Oauth
                     Enabled = true
                 },
 
-                new Client()
+                new Client
                 {
                     ClientId = "socialnetwork_implicit",
                     ClientSecrets = new List<Secret>
@@ -79,11 +81,16 @@ namespace SocialNetwork.Oauth
                     Flow = Flows.Implicit,
                     AllowedScopes = new List<string>
                     {
-                        Constants.StandardScopes.OpenId,
                         Constants.StandardScopes.Profile,
+                        Constants.StandardScopes.OpenId,
                         "read"
                     },
                     RedirectUris = new List<string>()
+                    {
+
+                        "http://localhost:28037"
+                    },
+                    PostLogoutRedirectUris = new List<string>()
                     {
 
                         "http://localhost:28037"

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
@@ -48,20 +50,23 @@ namespace SocialNetwork.Web.Controllers
         [Authorize]
         public async Task<ActionResult> Private()
         {
+
             var claimsPrincipal = User as ClaimsPrincipal;
+            using (var client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Authorization= new AuthenticationHeaderValue("Bearer",
+                    claimsPrincipal.FindFirst("access_token").Value);
 
-            //using (var client = new HttpClient())
-            //{
-            //    client.DefaultRequestHeaders.Authorization =
-            //        new AuthenticationHeaderValue("Bearer", 
-            //        claimsPrincipal.FindFirst("access_token").Value);
+                var token = claimsPrincipal.FindFirst("access_token").Value;
+              //  client.DefaultRequestHeaders.
 
-            //    var profile = await client.GetAsync("http://localhost:3467/api/Profiles");
+                var profile = await client.GetAsync("http://localhost:3468/api/profiles");
+                var profileContent = await profile.Content.ReadAsStringAsync();
+            }
 
-            //    var profileContent = await profile.Content.ReadAsStringAsync();
-            //}
 
             return View(claimsPrincipal.Claims);
+        
         }
 
         [Authorize]
